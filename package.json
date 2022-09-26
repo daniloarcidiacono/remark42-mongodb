@@ -1,0 +1,24 @@
+{
+  "name": "remark42-mongodb",
+  "version": "0.1.0",
+  "description": "Remark42 MongoDB Server",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daniloarcidiacono/remark42-mongodb.git"
+  },
+  "keywords": [
+    "remark42",
+    "mongodb"
+  ],
+  "author": "Danilo Arcidiacono <danilo.arcidiacono@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daniloarcidiacono/remark42-mongodb/issues"
+  },
+  "homepage": "https://github.com/daniloarcidiacono/remark42-mongodb",
+  "private": true
+}

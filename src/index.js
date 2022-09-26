@@ -1,0 +1,1 @@
+console.info("Remark42 MongoDB Server");
