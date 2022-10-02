@@ -2,7 +2,7 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/daniloarcidiacono/remark42-mongodb/workflow)
 [![codecov](https://codecov.io/github/daniloarcidiacono/remark42-mongodb/branch/main/graph/badge.svg?token=TBMTIG2F2U)](https://codecov.io/github/daniloarcidiacono/remark42-mongodb) 
-[![Known Vulnerabilities](https://snyk.io/test/github/daniloarcidiacono/remark42-mongodb/badge.svg)]
+![Known Vulnerabilities](https://snyk.io/test/github/daniloarcidiacono/remark42-mongodb/badge.svg)
 ![Remark42 compatiblity](https://img.shields.io/static/v1.svg?label=Remark42&message=v1.10.1&color=red)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
