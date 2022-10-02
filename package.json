@@ -4,7 +4,13 @@
   "description": "Remark42 MongoDB Server",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node dist/remark42-mongodb.js serve",
+    "dev": "cross-env NODE_ENV=development nodemon dist/remark42-mongodb.js serve",
+    "build": "webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
+    "test": "jest",
+    "prettier": "prettier --write src/**/*.{js,ts} test/**/*.{js,ts}",
+    "prettier:check": "prettier --list-different src/**/*.{js,ts} test/**/*.{js,ts}"
   },
   "repository": {
     "type": "git",
@@ -20,5 +26,37 @@
     "url": "https://github.com/daniloarcidiacono/remark42-mongodb/issues"
   },
   "homepage": "https://github.com/daniloarcidiacono/remark42-mongodb",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^4.1.0",
+    "@types/body-parser": "^1.19.2",
+    "@types/express": "^4.17.13",
+    "@types/inquirer": "^9.0.2",
+    "@types/jest": "^29.0.0",
+    "@types/yargs": "^17.0.13",
+    "clean-webpack-plugin": "^4.0.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.0.2",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "ts-jest": "^29.0.0-next.1",
+    "ts-loader": "^9.3.1",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "typescript": "^4.8.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "colors": "^1.4.0",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "inquirer": "^8.0.0",
+    "mongodb": "^4.9.1",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1",
+    "yargs": "^17.5.1"
+  }
 }

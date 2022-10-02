@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "CommonJS",
+    "target": "es6",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@cli/*": ["src/cli/*"],
+      "@logging/*": ["src/logging/*"],
+      "@persistence/*": ["src/persistence/*"],
+      "@remark42/*": ["src/remark42/*"],
+      "@util/*": ["src/util/*"],
+      "@web/*": ["src/web/*"],
+      "@test/*": ["test/*"]
+    }
+  },
+  "include": ["mongo.d.ts", "global.d.ts", "**/*.ts"],
+  "exclude": ["node_modules"]
+}
