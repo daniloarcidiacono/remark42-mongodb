@@ -174,7 +174,7 @@ export class StoreMongoController implements StoreAPI {
 			if (req.update === FlagTrue) {
 				if (req.ttl !== undefined && req.ttl.gt(0)) {
 					blockUntil = new Date();
-					blockUntil.setTime(req.ttl.ns * 1e-6);
+					blockUntil.setTime(blockUntil.getTime() + req.ttl.ns * 1e-6);
 				} else {
 					// permanent is 100 years
 					blockUntil = new Date();

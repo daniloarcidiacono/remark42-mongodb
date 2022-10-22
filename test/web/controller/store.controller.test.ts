@@ -1,6 +1,6 @@
 import { Collection, Db, MongoClient } from 'mongodb';
 import { StoreMongoController } from '@web/controller/store.controller';
-import { Locator } from '@remark42/dto/store.dto';
+import { FlagTrue, Locator } from '@remark42/dto/store.dto';
 import { describe, expect, test } from '@jest/globals';
 import { CommentAdapter } from '@persistence/adapter/comment.adapter';
 import { UserAdapter } from '@persistence/adapter/user.adapter';
@@ -12,6 +12,7 @@ import clientPromise from '@persistence/mongodb';
 import { createIndices } from '@persistence/utils';
 import { Time } from '@util/time';
 import { expectAsyncThrows, genComment, genUser } from '../../utils';
+import { Duration } from "@util/duration";
 
 jest.mock('@persistence/mongodb', () => ({
 	__esModule: true,
@@ -35,9 +36,14 @@ describe('StoreMongoController', () => {
 
 		// Create indices
 		await createIndices(client);
+
+		// https://github.com/nock/nock/issues/2200
+		jest.useFakeTimers({ doNotFake: ['nextTick', 'setImmediate'] });
+		jest.setSystemTime(new Date(2020, 3, 1));
 	});
 
 	afterAll(async () => {
+		jest.useRealTimers();
 		await client.close();
 	});
 
@@ -229,5 +235,76 @@ describe('StoreMongoController', () => {
 		const site = await sites.findOne({ _id: 'remark' });
 		expect(site).not.toBeNull();
 		expect(site.posts.length).toBe(3);
+	});
+
+	test('Flag (user block) works', async () => {
+		const uploadDate: Date = new Date(2020, 1, 1, 12, 0, 0);
+		jest.setSystemTime(uploadDate);
+
+		const storeController: StoreMongoController = new StoreMongoController();
+
+		const u1 = genUser({ uid: 'u1', name: 'User One', site: 'remark' });
+
+		const remarkSite: SiteDocument = {
+			_id: 'remark',
+			enabled: true,
+			key: '12345',
+			adminEmail: 'admin@example.com',
+			posts: [
+				{
+					url: '127.0.0.1',
+					readOnly: false
+				}
+			]
+		};
+		await sites.insertOne(remarkSite);
+		await users.insertOne(u1);
+
+		// 1 week in nanoseconds
+		const weekNs = 24 * 60 * 60 * 7 * 1e9;
+
+		// Block for a week
+		expect(
+			await storeController.Flag({
+				flag: "blocked",
+				locator: {
+					site: "remark",
+					url: ""
+				},
+				user_id: u1.uid,
+				update: FlagTrue,
+				ttl: new Duration(weekNs.toString())
+			})
+		).toEqual(true);
+
+		const expectedBlockUntil = new Date();
+		expectedBlockUntil.setTime(uploadDate.getTime() + weekNs * 1e-6);
+
+		expect(
+			await users.findOne({ uid: u1.uid })
+		).toMatchObject({
+			blocked: expectedBlockUntil
+		} as Partial<UserDocument>);
+
+		// Block permanently
+		expect(
+			await storeController.Flag({
+				flag: "blocked",
+				locator: {
+					site: "remark",
+					url: ""
+				},
+				user_id: u1.uid,
+				update: FlagTrue
+			})
+		).toEqual(true);
+		expectedBlockUntil.setTime(uploadDate.getTime());
+		expectedBlockUntil.setFullYear(uploadDate.getFullYear() + 100);
+
+		expect(
+			await users.findOne({ uid: u1.uid })
+		).toMatchObject({
+			blocked: expectedBlockUntil
+		} as Partial<UserDocument>);
 	});
 });

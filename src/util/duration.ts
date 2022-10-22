@@ -32,7 +32,7 @@ export class Duration {
 		(keys: string[], f?: ReviverFunction): ReviverFunction =>
 		(key, value) => {
 			// https://mariusschulz.com/blog/deserializing-json-strings-as-javascript-date-objects
-			if (keys.includes(key) && typeof value === 'string') {
+			if (keys.includes(key)) {
 				if (!isNaN(Number(value))) {
 					return new Duration(value);
 				}
