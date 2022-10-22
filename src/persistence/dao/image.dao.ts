@@ -201,8 +201,8 @@ export abstract class ImageMongoDAO {
 			.toArray();
 
 		// Log info
-		for (const imageToDelete of avatarsToDelete) {
-			getLogger().info("Deleting image { filename: '%s', uploadDate: '%s' }, cutoffDate: '%s'", imageToDelete.filename, imageToDelete.uploadDate, cutoffDate);
+		for (const avatarToDelete of avatarsToDelete) {
+			getLogger().info("Deleting avatar { filename: '%s', uploadDate: '%s' }, cutoffDate: '%s'", avatarToDelete.filename, avatarToDelete.uploadDate, cutoffDate);
 		}
 
 		// Delete
