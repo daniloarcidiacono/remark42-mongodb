@@ -57,6 +57,7 @@ export function JRpcRouter(routes: JRpcRoutes) {
 
 			// Log
 			const [logRequest] = truncate(req.body, response);
+			Logger.error('%s ===> %s', stringify(logRequest), ex.stack);
 			Logger.http('%s ===> %s', stringify(logRequest), stringify(response));
 
 			// Send the response
