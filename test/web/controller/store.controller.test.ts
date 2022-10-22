@@ -14,6 +14,7 @@ import { Time } from '@util/time';
 import { expectAsyncThrows, genComment, genUser } from '../../utils';
 import { Duration } from '@util/duration';
 
+jest.mock('@logging/index');
 jest.mock('@persistence/mongodb', () => ({
 	__esModule: true,
 	default: MongoClient.connect(global.__MONGO_URI__)

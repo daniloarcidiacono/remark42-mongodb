@@ -12,6 +12,8 @@ import { Time } from '@util/time';
 import { Collection, Db, MongoClient } from 'mongodb';
 import { expectAsyncThrows, genComment, genUser } from '../../utils';
 
+jest.mock('@logging/index');
+
 describe('StoreMongoDAO', () => {
 	let client: MongoClient;
 	let db: Db;

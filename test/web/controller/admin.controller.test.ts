@@ -10,6 +10,7 @@ import { createIndices } from '@persistence/utils';
 import { genUser } from '../../utils';
 import { EvCreate, EvDelete, EvUpdate, EvVote } from '@remark42/dto/admin.dto';
 
+jest.mock('@logging/index');
 jest.mock('@persistence/mongodb', () => ({
 	__esModule: true,
 	default: MongoClient.connect(global.__MONGO_URI__)

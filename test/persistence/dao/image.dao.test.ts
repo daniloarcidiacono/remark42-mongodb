@@ -5,6 +5,8 @@ import { ImageMongoDAO } from '@persistence/dao/image.dao';
 import { getImagesBucket, getImagesFilesCollection } from '@persistence/dao/utils';
 import { Time } from '@util/time';
 
+jest.mock('@logging/index');
+
 describe('ImageMongoDAO', () => {
 	let client: MongoClient;
 	let db: Db;
