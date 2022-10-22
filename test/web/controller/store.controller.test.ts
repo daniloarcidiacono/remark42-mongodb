@@ -12,7 +12,7 @@ import clientPromise from '@persistence/mongodb';
 import { createIndices } from '@persistence/utils';
 import { Time } from '@util/time';
 import { expectAsyncThrows, genComment, genUser } from '../../utils';
-import { Duration } from "@util/duration";
+import { Duration } from '@util/duration';
 
 jest.mock('@persistence/mongodb', () => ({
 	__esModule: true,
@@ -266,10 +266,10 @@ describe('StoreMongoController', () => {
 		// Block for a week
 		expect(
 			await storeController.Flag({
-				flag: "blocked",
+				flag: 'blocked',
 				locator: {
-					site: "remark",
-					url: ""
+					site: 'remark',
+					url: ''
 				},
 				user_id: u1.uid,
 				update: FlagTrue,
@@ -280,19 +280,17 @@ describe('StoreMongoController', () => {
 		const expectedBlockUntil = new Date();
 		expectedBlockUntil.setTime(uploadDate.getTime() + weekNs * 1e-6);
 
-		expect(
-			await users.findOne({ uid: u1.uid })
-		).toMatchObject({
+		expect(await users.findOne({ uid: u1.uid })).toMatchObject({
 			blocked: expectedBlockUntil
 		} as Partial<UserDocument>);
 
 		// Block permanently
 		expect(
 			await storeController.Flag({
-				flag: "blocked",
+				flag: 'blocked',
 				locator: {
-					site: "remark",
-					url: ""
+					site: 'remark',
+					url: ''
 				},
 				user_id: u1.uid,
 				update: FlagTrue
@@ -301,9 +299,7 @@ describe('StoreMongoController', () => {
 		expectedBlockUntil.setTime(uploadDate.getTime());
 		expectedBlockUntil.setFullYear(uploadDate.getFullYear() + 100);
 
-		expect(
-			await users.findOne({ uid: u1.uid })
-		).toMatchObject({
+		expect(await users.findOne({ uid: u1.uid })).toMatchObject({
 			blocked: expectedBlockUntil
 		} as Partial<UserDocument>);
 	});
