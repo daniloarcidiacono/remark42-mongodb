@@ -11,6 +11,7 @@ import { Readable, Stream } from 'stream';
 import { pipeline } from 'stream/promises';
 import { Time } from '@util/time';
 import { InfoResponse } from '@remark42/dto/image.dto';
+import getLogger from '@logging/index';
 
 export abstract class ImageMongoDAO {
 	/**
@@ -125,11 +126,18 @@ export abstract class ImageMongoDAO {
 				},
 				{
 					projection: {
-						_id: 1
+						_id: 1,
+						filename: 1,
+						metadata: 1
 					}
 				}
 			)
 			.toArray();
+
+		// Log info
+		for (const imageToDelete of imagesToDelete) {
+			getLogger().info("Deleting image { filename: '%s', metadata.cleanupTimer: '%s', metadata.staging: %s }, cutoffDate: '%s'", imageToDelete.filename, imageToDelete.metadata.cleanupTimer, imageToDelete.metadata.staging, cutoffDate);
+		}
 
 		// Delete
 		const imagesBucket: GridFSBucket = getImagesBucket(client);
@@ -184,11 +192,18 @@ export abstract class ImageMongoDAO {
 				},
 				{
 					projection: {
-						_id: 1
+						_id: 1,
+						filename: 1,
+						uploadDate: 1
 					}
 				}
 			)
 			.toArray();
+
+		// Log info
+		for (const imageToDelete of avatarsToDelete) {
+			getLogger().info("Deleting image { filename: '%s', uploadDate: '%s' }, cutoffDate: '%s'", imageToDelete.filename, imageToDelete.uploadDate, cutoffDate);
+		}
 
 		// Delete
 		const avatarsBucket: GridFSBucket = getAvatarsBucket(client);

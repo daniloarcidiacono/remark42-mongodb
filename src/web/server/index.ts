@@ -4,7 +4,7 @@ import { JRpcRouter } from '@web/jrpc/router';
 import endpoints from '@web/controller';
 import { Time } from '@util/time';
 import { Duration } from '@util/duration';
-import Logger from '@logging/index';
+import getLogger from '@logging/index';
 import clientPromise from '@persistence/mongodb';
 import { createIndices, isConnected } from '@persistence/utils';
 import { MongoClient } from 'mongodb';
@@ -47,14 +47,14 @@ export class Remark42MongoDBServer {
 	}
 
 	public async run() {
-		Logger.info('Starting server...');
+		getLogger().info('Starting server...');
 
 		// First connection to database
 		let client: MongoClient;
 		try {
 			client = await clientPromise;
 		} catch (e) {
-			Logger.error('Failed to initialize the database: ' + e.message);
+			getLogger().error('Failed to initialize the database: ' + e.message);
 			console.error('Could not connect to database!'.red);
 			process.exit(1);
 		}
@@ -63,14 +63,14 @@ export class Remark42MongoDBServer {
 			// Ensure indices are created on startup
 			await createIndices(client);
 		} catch (e) {
-			Logger.error('Failed to initialize the database: ' + e.message);
+			getLogger().error('Failed to initialize the database: ' + e.message);
 			console.error('Failed to initialize the database!'.red);
 			process.exit(1);
 		}
 
 		// Start the server
 		this.server = this.app.listen(global.serverOpts.port, global.serverOpts.hostname, () => {
-			Logger.info(`Server started on ` + `${global.serverOpts.hostname}:${global.serverOpts.port}`.white.bold);
+			getLogger().info(`Server started on ` + `${global.serverOpts.hostname}:${global.serverOpts.port}`.white.bold);
 		});
 
 		// Graceful shutdown
@@ -79,10 +79,10 @@ export class Remark42MongoDBServer {
 	}
 
 	public shutdown() {
-		Logger.info('Shutting down...');
+		getLogger().info('Shutting down...');
 
 		this.server.close((err?: Error) => {
-			Logger.info('Server closed');
+			getLogger().info('Server closed');
 			process.exit(err ? 1 : 0);
 		});
 	}

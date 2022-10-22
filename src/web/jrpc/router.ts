@@ -4,7 +4,7 @@ import { JRpcRequest } from '@web/jrpc/request';
 import { JRpcEndpoint } from '@web/jrpc/endpoint';
 import { Time } from '@util/time';
 import { Duration } from '@util/duration';
-import Logger from '@logging/index';
+import getLogger from '@logging/index';
 
 export type JRpcRoutes = { [method: string]: JRpcEndpoint<any, any> };
 
@@ -33,7 +33,7 @@ export function JRpcRouter(routes: JRpcRoutes) {
 				id: req.body.id
 			};
 
-			Logger.http('%s ===> %s', req.body, response);
+			getLogger().http('%s ===> %s', req.body, response);
 			return res.status(200).json(response);
 		}
 
@@ -45,7 +45,7 @@ export function JRpcRouter(routes: JRpcRoutes) {
 
 			// Log
 			const [logRequest, logResponse] = truncate(req.body, response);
-			Logger.http('%s ===> %s', stringify(logRequest), stringify(logResponse));
+			getLogger().http('%s ===> %s', stringify(logRequest), stringify(logResponse));
 
 			// Send the response
 			return res.status(200).json(response);
@@ -57,8 +57,10 @@ export function JRpcRouter(routes: JRpcRoutes) {
 
 			// Log
 			const [logRequest] = truncate(req.body, response);
-			Logger.error('%s ===> %s', stringify(logRequest), ex.stack);
-			Logger.http('%s ===> %s', stringify(logRequest), stringify(response));
+			if (ex.stack) {
+				getLogger().error('%s ===> %s', stringify(logRequest), ex.stack);
+			}
+			getLogger().http('%s ===> %s', stringify(logRequest), stringify(response));
 
 			// Send the response
 			return res.status(200).json(response);

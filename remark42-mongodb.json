@@ -1,7 +1,7 @@
 {
     "port": 9100,
     "hostname": "localhost",
-    "database": "mongodb://localhost:27017/remark42-mongodb",
+    "database": "mongodb://localhost:27017/remark42-mongo-rpc",
     "avatars": "remark_avatars",
     "bodyLimit": "8mb",
     "dynamicPosts": true,

@@ -38,76 +38,84 @@ const consoleFormat = winston.format.combine(
 
 const toDays = (days?: number) => (days !== undefined ? days + 'd' : undefined);
 
-// Create the logger instance that has to be exported
-// and used to log messages.
-const Logger = winston.createLogger({
-	level: level(),
-	levels: {
-		error: 0,
-		warn: 1,
-		http: 2,
-		info: 3,
-		debug: 4
-	},
-	format: defaultFormat,
-	transports: [
-		new DailyRotateFile({
-			// This filename can include the %DATE% placeholder which will include the
-			// formatted datePattern at that point in the filename.
-			filename: path.join(global.serverOpts.logDir, 'access-%DATE%.log'),
+let logger: winston.Logger;
 
-			// Logs will rotate each day
-			// Note: do not specify the 'frequency' parameter, otherwise the %DATA% won't be resolved
-			// (see https://github.com/winstonjs/winston-daily-rotate-file/issues/312)
-			datePattern: 'YYYY-MM-DD',
-			zippedArchive: true,
-			maxSize: global.serverOpts.logMaxSize,
+function getLogger() {
+	if (!logger) {
+		// Create the logger instance that has to be exported
+		// and used to log messages.
+		logger = winston.createLogger({
+			level: level(),
+			levels: {
+				error: 0,
+				warn: 1,
+				http: 2,
+				info: 3,
+				debug: 4
+			},
+			format: defaultFormat,
+			transports: [
+				new DailyRotateFile({
+					// This filename can include the %DATE% placeholder which will include the
+					// formatted datePattern at that point in the filename.
+					filename: path.join(global.serverOpts.logDir, 'access-%DATE%.log'),
 
-			// Maximum number of logs to keep. If not set, no logs will be removed
-			maxFiles: toDays(global.serverOpts.logMaxFiles),
-			level: 'http',
-			format: winston.format.combine(levelFilter(['http'])(), defaultFormat)
-		}),
+					// Logs will rotate each day
+					// Note: do not specify the 'frequency' parameter, otherwise the %DATA% won't be resolved
+					// (see https://github.com/winstonjs/winston-daily-rotate-file/issues/312)
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: global.serverOpts.logMaxSize,
 
-		new DailyRotateFile({
-			// This filename can include the %DATE% placeholder which will include the
-			// formatted datePattern at that point in the filename.
-			filename: path.join(global.serverOpts.logDir, 'main-%DATE%.log'),
+					// Maximum number of logs to keep. If not set, no logs will be removed
+					maxFiles: toDays(global.serverOpts.logMaxFiles),
+					level: 'http',
+					format: winston.format.combine(levelFilter(['http'])(), defaultFormat)
+				}),
 
-			// Logs will rotate each day
-			// Note: do not specify the 'frequency' parameter, otherwise the %DATA% won't be resolved
-			// (see https://github.com/winstonjs/winston-daily-rotate-file/issues/312)
-			datePattern: 'YYYY-MM-DD',
-			zippedArchive: true,
-			maxSize: global.serverOpts.logMaxSize,
+				new DailyRotateFile({
+					// This filename can include the %DATE% placeholder which will include the
+					// formatted datePattern at that point in the filename.
+					filename: path.join(global.serverOpts.logDir, 'main-%DATE%.log'),
 
-			// Maximum number of logs to keep. If not set, no logs will be removed
-			maxFiles: toDays(global.serverOpts.logMaxFiles),
-			level: 'debug',
-			format: winston.format.combine(levelFilter(['debug', 'info', 'warn'])(), defaultFormat)
-		}),
+					// Logs will rotate each day
+					// Note: do not specify the 'frequency' parameter, otherwise the %DATA% won't be resolved
+					// (see https://github.com/winstonjs/winston-daily-rotate-file/issues/312)
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: global.serverOpts.logMaxSize,
 
-		new DailyRotateFile({
-			// This filename can include the %DATE% placeholder which will include the
-			// formatted datePattern at that point in the filename.
-			filename: path.join(global.serverOpts.logDir, 'error-%DATE%.log'),
+					// Maximum number of logs to keep. If not set, no logs will be removed
+					maxFiles: toDays(global.serverOpts.logMaxFiles),
+					level: 'debug',
+					format: winston.format.combine(levelFilter(['debug', 'info', 'warn'])(), defaultFormat)
+				}),
 
-			// Logs will rotate each day
-			// Note: do not specify the 'frequency' parameter, otherwise the %DATA% won't be resolved
-			// (see https://github.com/winstonjs/winston-daily-rotate-file/issues/312)
-			datePattern: 'YYYY-MM-DD',
-			zippedArchive: true,
-			maxSize: global.serverOpts.logMaxSize,
+				new DailyRotateFile({
+					// This filename can include the %DATE% placeholder which will include the
+					// formatted datePattern at that point in the filename.
+					filename: path.join(global.serverOpts.logDir, 'error-%DATE%.log'),
 
-			// Maximum number of logs to keep. If not set, no logs will be removed
-			maxFiles: toDays(global.serverOpts.logMaxFiles),
-			level: 'error'
-		}),
+					// Logs will rotate each day
+					// Note: do not specify the 'frequency' parameter, otherwise the %DATA% won't be resolved
+					// (see https://github.com/winstonjs/winston-daily-rotate-file/issues/312)
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: global.serverOpts.logMaxSize,
 
-		new winston.transports.Console({
-			format: winston.format.combine(levelFilter(['debug', 'info', 'warn'])(), consoleFormat)
-		})
-	]
-});
+					// Maximum number of logs to keep. If not set, no logs will be removed
+					maxFiles: toDays(global.serverOpts.logMaxFiles),
+					level: 'error'
+				}),
 
-export default Logger;
+				new winston.transports.Console({
+					format: winston.format.combine(levelFilter(['debug', 'info', 'warn'])(), consoleFormat)
+				})
+			]
+		});
+	}
+
+	return logger;
+}
+
+export default getLogger;
