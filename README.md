@@ -3,19 +3,17 @@
 ![GitHub Workflow Status](https://github.com/daniloarcidiacono/remark42-mongodb/actions/workflows/workflow.yml/badge.svg)
 ![Known Vulnerabilities](https://snyk.io/test/github/daniloarcidiacono/remark42-mongodb/badge.svg)
 [![codecov](https://codecov.io/github/daniloarcidiacono/remark42-mongodb/branch/main/graph/badge.svg?token=TBMTIG2F2U)](https://codecov.io/github/daniloarcidiacono/remark42-mongodb) 
-![Remark42 compatiblity](https://img.shields.io/static/v1.svg?label=Remark42&message=v1.10.1&color=red)
+![Remark42 compatiblity](https://img.shields.io/static/v1.svg?label=Remark42&message=v1.11.0&color=red)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Store [Remark42](https://remark42.com/) comments, images and avatars on MongoDB. \
-Tested with [Remark42 v1.10.1](https://github.com/umputun/remark42/releases/tag/v1.10.1).
+Tested with [Remark42 v1.11.0](https://github.com/umputun/remark42/releases/tag/v1.11.0).
 
 > **Warning**
-> The fix for the following issues on Remark42 are required for Remark42 MongoDB Server to work:
+> The fix for the following issue on Remark42 are required for Remark42 MongoDB Server to work:
 > 
-> - [Type cast panic when using RPC](https://github.com/umputun/remark42/issues/1475)
-> - [Key() method invoked with wrong siteID](https://github.com/umputun/remark42/issues/1499)
+> - [Wrong siteId "ignore" used when logging in](https://github.com/umputun/remark42/issues/1519)
 > 
-> Until version v1.10.2 is released it's mandatory to build Remark42 from its `master` branch.
 
 ## Setup
 Initialize the server with `remark42-mongodb.js init`:
@@ -119,9 +117,6 @@ Remark42 can also store avatars in a GridFS bucket with the following configurat
 AVATAR_TYPE=uri
 AVATAR_URI=mongodb://localhost:27017/remark42-mongodb?ava_db=remark42-mongodb&ava_coll=remark_avatars
 ```
-
-> **Warning**
-> At the moment `mongodb+srv` URIs (used by MongoDB Atlas) are not handled correctly ([open issue](https://github.com/go-pkgz/auth/issues/127)).
 
 Remark42 MongoDB Server can periodically clean up unused avatars by configuring `avatars` to `remark_avatars`. 
 
